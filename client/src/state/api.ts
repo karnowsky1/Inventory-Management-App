@@ -8,6 +8,13 @@ export interface Product {
   stockQuantity: number
 }
 
+export interface NewProduct {
+  name: string
+  price: number
+  rating?: number
+  stockQuantity: number
+}
+
 export interface SalesSummary {
   salesSummaryId: string
   totalValue: number
@@ -46,13 +53,32 @@ export interface DashboardMetrics {
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL}),
   reducerPath: "api",
-  tagTypes: ["DashboardMetrics"],
+  tagTypes: ["DashboardMetrics", "Products"],
   endpoints: (build) => ({
     getDashboardMetrics: build.query<DashboardMetrics, void>({
       query: () => "/dashboard",
       providesTags: ["DashboardMetrics"]
     }),
+    getProducts: build.query<Product[], string | void>({ // could be a string for search query or could be empty
+      query: (search) => ({
+        url: "/products",
+        params: search ? { search } : {}
+      }),
+      providesTags: ["Products"],
+    }),
+    createProduct: build.mutation<Product, NewProduct>({ // mutation call, anything that is not a get request
+      query: (newProduct) => ({
+        url: "/products",
+        method: "POST", // since we're doing a mutation call, need to identify the method 
+        body: newProduct 
+      }),
+      invalidatesTags: ["Products"] // this products list will be invalidated, cause a new api rquest to be made for products
+    }) 
   }),
 })
 
-export const {useGetDashboardMetricsQuery} = api
+export const {
+  useGetDashboardMetricsQuery, 
+  useGetProductsQuery, 
+  useCreateProductMutation,
+} = api
