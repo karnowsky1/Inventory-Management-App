@@ -26,11 +26,6 @@ const mockSettings: UserSetting[] = [
     type: "toggle"
   },
   {
-    label: "Dark Mode", 
-    value: false,
-    type: "toggle"
-  },
-  {
     label: "Language", 
     value: "English",
     type: "text"
@@ -52,10 +47,10 @@ const Settings = () => {
       <table className="min-w-full bg-white rounded-lg">
         <thead className="bg-gray-800 text-white">
           <tr>
-            <th className="text-left py-3 uppercase font-semibold text-sm">
+            <th className="text-left p-3 uppercase font-semibold text-sm">
               Setting
             </th>
-            <th className="text-left py-3 uppercase font-semibold text-sm">
+            <th className="text-left p-3 uppercase font-semibold text-sm">
               Value
             </th>
           </tr>
